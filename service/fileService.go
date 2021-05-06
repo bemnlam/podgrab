@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strconv"
 	"time"
+	"regexp"
 
 	"github.com/akhilrex/podgrab/internal/sanitize"
 	stringy "github.com/gobeam/stringy"
@@ -29,8 +30,9 @@ func Download(link string, episodeTitle string, podcastName string, prefix strin
 		Logger.Errorw("Error getting response: "+link, err)
 		return "", err
 	}
-
-	fileName := getFileName(link, getFilenameFromLink(link), getFileExtensionFromLink(link))
+	name := getFilenameFromLink(link)
+	ext := getFileExtensionFromLink(link)
+	fileName := getFileName(link, name, ext)
 	// fileName := getFileName(link, episodeTitle, ".mp3")
 	if prefix != "" {
 		fileName = fmt.Sprintf("%s-%s", prefix, fileName)
@@ -289,15 +291,15 @@ func getFileName(link string, title string, defaultExtension string) string {
 
 }
 
-func getFilenameFromLink(link string) {
-	var re = regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
-	var parts = validID.FindStringSubmatch(link)
+func getFilenameFromLink(link string) string {
+	re := regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
+	parts := re.FindStringSubmatch(link)
 	return parts[0]
 }
 
-func getFileExtensionFromLink(link string) {
-	var re = regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
-	var parts = validID.FindStringSubmatch(link)
+func getFileExtensionFromLink(link string) string {
+	re := regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
+	parts := re.FindStringSubmatch(link)
 	return parts[1]
 }
 
