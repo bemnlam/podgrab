@@ -1,7 +1,8 @@
 version: "2.1"
 services:
   podgrab:
-    image: akhilrex/podgrab
+    # image: akhilrex/podgrab
+    build: .
     container_name: podgrab
     environment:
       - CHECK_FREQUENCY=240
