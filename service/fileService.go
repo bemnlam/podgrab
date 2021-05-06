@@ -30,7 +30,8 @@ func Download(link string, episodeTitle string, podcastName string, prefix strin
 		return "", err
 	}
 
-	fileName := getFileName(link, episodeTitle, ".mp3")
+	fileName := getFileName(link, getFilenameFromLink(link), getFileExtensionFromLink(link))
+	// fileName := getFileName(link, episodeTitle, ".mp3")
 	if prefix != "" {
 		fileName = fmt.Sprintf("%s-%s", prefix, fileName)
 	}
@@ -287,6 +288,19 @@ func getFileName(link string, title string, defaultExtension string) string {
 	return str.KebabCase().Get() + ext
 
 }
+
+func getFilenameFromLink(link string) {
+	var re = regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
+	var parts = validID.FindStringSubmatch(link)
+	return parts[0]
+}
+
+func getFileExtensionFromLink(link string) {
+	var re = regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
+	var parts = validID.FindStringSubmatch(link)
+	return parts[1]
+}
+
 
 func cleanFileName(original string) string {
 	return sanitize.Name(original)
