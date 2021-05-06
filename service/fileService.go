@@ -294,13 +294,13 @@ func getFileName(link string, title string, defaultExtension string) string {
 func getFilenameFromLink(link string) string {
 	re := regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
 	parts := re.FindStringSubmatch(link)
-	return parts[0]
+	return parts[1]
 }
 
 func getFileExtensionFromLink(link string) string {
 	re := regexp.MustCompile(`(?P<Name>[^\/\\&\?]+)\.(?P<Ext>\w{3,4}$)`)
 	parts := re.FindStringSubmatch(link)
-	return parts[1]
+	return parts[2]
 }
 
 
